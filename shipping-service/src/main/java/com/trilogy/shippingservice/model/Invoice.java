@@ -1,5 +1,7 @@
 package com.trilogy.shippingservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -7,32 +9,33 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Invoice implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int invoiceId;
-    private int customerId;
+    private Integer invoiceId;
+    private Integer customerId;
     private String shipToZip;
-    private LocalDate date;
-    private double totalCost;
-    private double salesTax;
-    private double surCharge;
+    private LocalDate purchaseDate;
+    private Double totalCost;
+    private Double salesTax;
+    private Double surCharge;
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<InvoiceItem> invoiceItemSet = new HashSet<>();
 
-    public int getInvoiceId() {
+    public Integer getInvoiceId() {
         return invoiceId;
     }
 
-    public void setInvoiceId(int invoiceId) {
+    public void setInvoiceId(Integer invoiceId) {
         this.invoiceId = invoiceId;
     }
 
-    public int getCustomerId() {
+    public Integer getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(int customerId) {
+    public void setCustomerId(Integer customerId) {
         this.customerId = customerId;
     }
 
@@ -44,35 +47,35 @@ public class Invoice implements Serializable {
         this.shipToZip = shipToZip;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDate getPurchaseDate() {
+        return purchaseDate;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setPurchaseDate(LocalDate purchaseDate) {
+        this.purchaseDate = purchaseDate;
     }
 
-    public double getTotalCost() {
+    public Double getTotalCost() {
         return totalCost;
     }
 
-    public void setTotalCost(double totalCost) {
+    public void setTotalCost(Double totalCost) {
         this.totalCost = totalCost;
     }
 
-    public double getSalesTax() {
+    public Double getSalesTax() {
         return salesTax;
     }
 
-    public void setSalesTax(double salesTax) {
+    public void setSalesTax(Double salesTax) {
         this.salesTax = salesTax;
     }
 
-    public double getSurCharge() {
+    public Double getSurCharge() {
         return surCharge;
     }
 
-    public void setSurCharge(double surCharge) {
+    public void setSurCharge(Double surCharge) {
         this.surCharge = surCharge;
     }
 
@@ -84,18 +87,3 @@ public class Invoice implements Serializable {
         this.invoiceItemSet = invoiceItemSet;
     }
 }
-
-
-/*
-create table if not exists invoice (
-	  invoice_id int(11) not null auto_increment primary key,
-    customer_id int(11) not null,
-    shipto_zip char(5) not null,
-    purchase_date date not null,
-    total_cost decimal(7.2) not null,
-    sales_tax decimal(7.2) not null,
-    surcharge decimal(7,2) not null
-);
-
-
- */

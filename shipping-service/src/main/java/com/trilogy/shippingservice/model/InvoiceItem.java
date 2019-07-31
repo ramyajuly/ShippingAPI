@@ -1,35 +1,38 @@
 package com.trilogy.shippingservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "invoice"})
 public class InvoiceItem implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int invoiceItemId;
-    private int invoiceId;
+    private Integer invoiceItemId;
+    private Integer invoiceId;
     private String itemName;
     private String itemDescription;
-    private int weight;
-    private double shipCost;
+    private Integer weight;
+    private Double shipCost;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "invoice_id")
     private Invoice invoice;
 
-    public int getInvoiceItemId() {
+    public Integer getInvoiceItemId() {
         return invoiceItemId;
     }
 
-    public void setInvoiceItemId(int invoiceItemId) {
+    public void setInvoiceItemId(Integer invoiceItemId) {
         this.invoiceItemId = invoiceItemId;
     }
 
-    public int getInvoiceId() {
+    public Integer getInvoiceId() {
         return invoiceId;
     }
 
-    public void setInvoiceId(int invoiceId) {
+    public void setInvoiceId(Integer invoiceId) {
         this.invoiceId = invoiceId;
     }
 
@@ -49,19 +52,19 @@ public class InvoiceItem implements Serializable {
         this.itemDescription = itemDescription;
     }
 
-    public int getWeight() {
+    public Integer getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(Integer weight) {
         this.weight = weight;
     }
 
-    public double getShipCost() {
+    public Double getShipCost() {
         return shipCost;
     }
 
-    public void setShipCost(double shipCost) {
+    public void setShipCost(Double shipCost) {
         this.shipCost = shipCost;
     }
 
@@ -73,15 +76,3 @@ public class InvoiceItem implements Serializable {
         this.invoice = invoice;
     }
 }
-
-/*
-
-create table if not exists invoice_item (
-	  invoice_item_id int(11) not null auto_increment primary key,
-    invoice_id int(11) not null,
-    item_name varchar(50) not null,
-    item_description varchar(255) not null,
-    weight int(11) not null,
-    ship_cost decimal(7,2) not null
-);
- */

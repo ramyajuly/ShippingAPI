@@ -1,37 +1,25 @@
-package com.trilogy.shippingservice.viewModel;
+package com.trilogy.shippingedgeservice.model;
 
-import com.trilogy.shippingservice.model.Invoice;
-import com.trilogy.shippingservice.model.InvoiceItem;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-public class InvoiceView {
+public class Invoice {
     private int invoiceId;
     private int customerId;
     private String shipToZip;
+    @JsonDeserialize
+    @JsonSerialize(using = ToStringSerializer.class)
     private LocalDate date;
     private double totalCost;
     private double salesTax;
     private double surCharge;
-    private Set<InvoiceItemView> invoiceItemSet = new HashSet<>();
-
-    public InvoiceView(){}
-
-    public InvoiceView(Invoice invoice) {
-        this.invoiceId = invoice.getInvoiceId();
-        this.customerId = invoice.getCustomerId();
-        this.shipToZip = invoice.getShipToZip();
-        this.date = invoice.getDate();
-        this.totalCost = invoice.getTotalCost();
-        this.salesTax = invoice.getSalesTax();
-        this.surCharge = invoice.getSurCharge();
-        for(InvoiceItem invoiceItem : invoice.getInvoiceItemSet()){
-            invoiceItemSet.add(new InvoiceItemView(invoiceItem));
-        }
-    }
+    private Set<InvoiceItem> invoiceItemSet = new HashSet<>();
 
     public int getInvoiceId() {
         return invoiceId;
@@ -89,11 +77,31 @@ public class InvoiceView {
         this.surCharge = surCharge;
     }
 
-    public Set<InvoiceItemView> getInvoiceItemSet() {
+    public Set<InvoiceItem> getInvoiceItemSet() {
         return invoiceItemSet;
     }
 
-    public void setInvoiceItemSet(Set<InvoiceItemView> invoiceItemSet) {
+    public void setInvoiceItemSet(Set<InvoiceItem> invoiceItemSet) {
         this.invoiceItemSet = invoiceItemSet;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Invoice invoice = (Invoice) o;
+        return invoiceId == invoice.invoiceId &&
+                customerId == invoice.customerId &&
+                Double.compare(invoice.totalCost, totalCost) == 0 &&
+                Double.compare(invoice.salesTax, salesTax) == 0 &&
+                Double.compare(invoice.surCharge, surCharge) == 0 &&
+                Objects.equals(shipToZip, invoice.shipToZip) &&
+                Objects.equals(date, invoice.date) &&
+                Objects.equals(invoiceItemSet, invoice.invoiceItemSet);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(invoiceId, customerId, shipToZip, date, totalCost, salesTax, surCharge, invoiceItemSet);
     }
 }
